@@ -158,3 +158,62 @@ btnScrollTo.addEventListener('click', function (event) {
 
   section1.scrollIntoView({ behavior: 'smooth' });
 });
+
+//types of events and event handlers******************************
+const h1 = document.querySelector('h1');
+
+const alertH1 = function (event) {
+  alert('event');
+  // h1.removeEventListener('mouseenter', alertH1); //export a function into its own function.
+  //enables addition and removal of event using the same event(addEventlistener())
+  //when addeventlistener is initiated, it also initiates alertH1 which contains removeEventListener()
+};
+
+// h1.addEventListener('mouseenter', alertH1);
+
+// setTimeout(() => {
+//   h1.removeEventListener('mouseenter', alertH1); //export a function into its own function
+// }, 5000);
+
+// h1.onmouseenter = function (event) {
+//   alert('lol');
+// };
+
+// buttonScrollTo.addEventListener(
+//   'click',
+//   function () {
+//     console.log('Only once');
+//   },
+//   { once: true }
+// );
+
+//Event Propagation: Bubbling and Capturing**************************************
+const randomInt = (min, max) =>
+  Math.floor(Math.random() * (max - min + 1) + min);
+
+const randomcolor = () =>
+  `rgb(${randomInt(0, 255)},${randomInt(0, 255)},${randomInt(0, 255)})`;
+
+document
+  .querySelector('.nav__link')
+  .addEventListener('click', function (event) {
+    this.style.backgroundColor = randomcolor(); //this keyword points to the element on which the event listener is attached to
+    console.log('link', event.target); //event.target returns where the event originated and not the element on which the
+    //...handler is attached.
+    console.log(event.currentTarget === this); ///currenTarget also points to the element on which the event listener is attached to
+
+    //stopping propagation
+    // event.stopPropagation()
+  });
+
+document
+  .querySelector('.nav__links')
+  .addEventListener('click', function (event) {
+    this.style.backgroundColor = randomcolor();
+    console.log('container', event.target);
+  });
+
+document.querySelector('.nav').addEventListener('click', function (event) {
+  this.style.backgroundColor = randomcolor();
+  console.log('nav', event.target);
+});
