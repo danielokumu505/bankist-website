@@ -36,6 +36,7 @@ document.addEventListener('keydown', function (e) {
 });
 
 //////////////////////////////
+//Lessons
 //selecting elements*********************
 console.log(document.documentElement);
 console.log(document.head);
@@ -81,5 +82,79 @@ btn.addEventListener('click', () => {
   // message.remove();
 
   message.parentElement.removeChild(message); //dom traversing(moving up and down in the dom tree)
+});
 
+//styling
+message.style.backgroundColor = '#37383d'; //these javascript invoked styles are set as inline styles in the html
+message.style.width = '120%'; //these javascript invoked styles are set as inline styles in the html
+
+console.log(message.style.height); //can only access styles invoked by javascript
+console.log(message.style.width); //can only access styles invoked by javascript
+
+console.log(getComputedStyle(message).color); //gives computed style as it appears on page even when not defined in css
+console.log(getComputedStyle(message).width);
+console.log(getComputedStyle(message).backgroundColor);
+
+message.style.height =
+  Number.parseFloat(getComputedStyle(message).height) + 30 + 'px';
+
+// document.documentElement.style.setProperty('--color-primary', 'orangered'); //setting properties for css variables
+
+//attributes
+
+const logo = document.querySelector('.nav__logo');
+console.log(logo.alt); //works for standard element attribute
+console.log(logo.src); //returns absolute source
+console.log(logo.className);
+logo.alt = 'Beautiful minimalist logo';
+
+//non standard attribute
+
+console.log(logo.designer); //the attribute will not be accessed for a non-standard attribute
+console.log(logo.getAttribute('designer'));
+logo.setAttribute('company', 'Bankist');
+
+console.log(logo.getAttribute('src')); //returns relative source
+
+const link = document.querySelector('.nav__link--btn');
+console.log(link.href);
+console.log(link.getAttribute('href'));
+
+//data attributes
+console.log(logo.dataset.versionNumber);
+
+// //classes
+// logo.classList.add('c','v','s')//multiples classes can be added.
+// logo.classList.remove()
+// logo.classList.toggle()
+// logo.classList.contains()// not includes
+
+// logo.className = 'className'; //overrides existing classes, prevents existance of multiple classes
+
+///
+const btnScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
+
+btnScrollTo.addEventListener('click', function (event) {
+  const s1coords = section1.getBoundingClientRect();
+  console.log(s1coords);
+  // console.log(event.target.getBoundingClientRect());
+
+  // console.log(window.pageXOffset,pageYOffset)
+  // console.log(window.scrollX,window.scrollY);
+  // console.log(
+  //   document.documentElement.clientHeight,
+  //   document.documentElement.clientWidth
+  // );
+
+  //////scrolling
+  // window.scrollTo(s1coords.left + window.pageXOffset,s1coords.top + window.pageYOffset)
+
+  // window.scrollTo({
+  //   top: s1coords.top + window.pageYOffset,
+  //   left: s1coords.left,
+  //   behavior: 'smooth',
+  // });
+
+  section1.scrollIntoView({ behavior: 'smooth' });
 });
