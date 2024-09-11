@@ -61,7 +61,8 @@ btnScrollTo.addEventListener('click', function (event) {
   section1.scrollIntoView({ behavior: 'smooth' });
 });
 
-/////page navigation
+/////page navigation***************************************
+
 // this method is not optimal since an event is assigned to every(multiple) element
 //..in the node list array while only one element is clicked
 // document.querySelectorAll('.nav__link').forEach(function (element) {
@@ -80,13 +81,14 @@ btnScrollTo.addEventListener('click', function (event) {
 // });
 
 /////page navigation with event delegation
-// 1. add event listener to common parent element
+// 1. add event listener to a common parent element
 document
   .querySelector('.nav__links')
   .addEventListener('click', function (event) {
     event.preventDefault();
     console.log(event.target);
 
+    // 2. determine what element originated the event
     if (
       event.target.classList.contains('nav__link') &&
       !event.target.classList.contains('nav__link--btn')
@@ -100,7 +102,52 @@ document
     }
   });
 
-// 2. determine what element originated the event
+/////tabbed components
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+
+console.log(tabsContent);
+
+//this method is not optimal since an event is assigned to every(multiple) elements
+// tabs.forEach(function(tab){
+// tab.addEventListener('click',()=>console.log(tab))
+// })
+
+//tabbed functionality with event delegation
+tabsContainer.addEventListener('click', function (event) {
+  const clicked = event.target.closest('.operations__tab'); //selects the closest PARENT element with
+  // //...the class specified in the parenthesis () . usefull in event delegation
+  // console.log(clicked);
+
+  //Guard clause(cleaner code)
+  if (!clicked) return; // if clicked is null, the function is immediately finished. any code afterwords
+  //...is not executed
+
+  //removing active classes
+  tabs.forEach(function (tab) {
+    tab.classList.remove('operations__tab--active');
+  }); //remove 'operations__tab--active' class in all tabs
+
+  tabsContent.forEach(function (tabContent) {
+    tabContent.classList.remove('operations__content--active');
+  });
+
+  //activating tab
+  clicked.classList.add('operations__tab--active'); //add 'operations__tab--active' class to clicked tab
+
+  // ///variant non clean code
+  // if (clicked) {
+  //   clicked.classList.toggle('operations__tab--active');
+  // }
+
+  //activating content area
+  const currentTabcontent = document.querySelector(
+    `.operations__content--${clicked.dataset.tab}`
+  );
+
+  currentTabcontent.classList.add('operations__content--active');
+});
 
 ////////////////////////////////////
 ///////////////////////////////
@@ -260,4 +307,40 @@ console.log(logo.dataset.versionNumber);
 // document.querySelector('.nav').addEventListener('click', function (event) {
 //   this.style.backgroundColor = randomcolor();
 //   console.log('nav', event.target);
+// });
+
+//Dom traversing**************************************
+// const h1 = document.querySelector('h1');
+
+//Going downwards: selecting child elements
+// console.log(h1.querySelectorAll('.highlight')); //queryselector also works on dom elements
+// console.log(h1.childNodes); // returns all content inside h1
+// console.log(h1.children); //gives a live collection of elements in h1
+// h1.firstElementChild.style.color = 'white';
+// h1.lastElementChild.style.color = 'white';
+
+// console.log(h1.parentNode);
+// console.log(h1.parentElement); //The parent element is also the parent node
+
+// h1.closest('.header').style.background = 'var(--gradient-secondary)'; //selects the closest parent element with
+// //...the class specified in the parenthesis () . usefull in event delegation
+// //...closest finds parent elements no matter how high up in the dom tree
+
+// h1.closest('h1').style.background = 'var(--gradient-primary)';
+
+//Going sideways: selecting sibling elements
+
+//only previous and next sibings can be accessed
+// console.log(h1.previousElementSibling);
+// console.log(h1.nextElementSibling);
+
+// console.log(h1.previousSibling);
+// console.log(h1.nextSibling);
+
+// console.log(h1.parentElement.children); //returns array like html collection. it is an iterable that can
+//...be spread into an array
+// Array.from(h1.parentElement.children).forEach(function (element) {
+//   if (element !== h1) {
+//     element.style.transform = 'scale(0.5)';
+//   }
 // });
