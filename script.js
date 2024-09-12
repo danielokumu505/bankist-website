@@ -5,6 +5,10 @@ const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1');
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+const nav = document.querySelector('.nav');
 
 ///////////////////////////////////////
 ///// Modal window
@@ -103,9 +107,6 @@ document
   });
 
 /////tabbed components
-const tabs = document.querySelectorAll('.operations__tab');
-const tabsContainer = document.querySelector('.operations__tab-container');
-const tabsContent = document.querySelectorAll('.operations__content');
 
 console.log(tabsContent);
 
@@ -148,6 +149,36 @@ tabsContainer.addEventListener('click', function (event) {
 
   currentTabcontent.classList.add('operations__content--active');
 });
+
+/////menu fade animation
+const handleHover = function (event, opacity) {
+  if (event.target.classList.contains('nav__link')) {
+    const link = event.target;
+    const siblings = link.closest('.nav').querySelectorAll('.nav__link'); //closest() is a dom selector that requires the period '.' for class selection
+    //...queryselector can be used on an element to search for a certain query only in that element
+    const logo = link.closest('.nav').querySelector('img');
+
+    siblings.forEach(function (element) {
+      if (element !== link) {
+        console.log(element);
+        element.style.opacity = opacity;
+      }
+    });
+
+    logo.style.opacity = opacity;
+  }
+};
+
+//Passing 'arguements' into handler function
+nav.addEventListener('mouseover', function (event) {
+  handleHover(event, 0.5);
+}); //mouseover is similar to mouse enter but mouse over allows event bubbling
+//...addeventlistener expects a function as the second arguement and not any other regular value
+//...bind returns a new function with this keyword set to the arguement passed into bind
+
+nav.addEventListener('mouseout', function (event) {
+  handleHover(event, 1);
+}); //mouse out is the opposite of mouse over
 
 ////////////////////////////////////
 ///////////////////////////////
