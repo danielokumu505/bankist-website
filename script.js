@@ -42,7 +42,8 @@ document.addEventListener('keydown', function (e) {
 
 /////scrolling to feature section
 btnScrollTo.addEventListener('click', function (event) {
-  const s1coords = section1.getBoundingClientRect();
+  const s1coords = section1.getBoundingClientRect(); //returns a DOMRect object providing information about
+  //... the size of an element and its position relative to the viewport.
   console.log(s1coords);
   // console.log(event.target.getBoundingClientRect());
 
@@ -108,7 +109,7 @@ document
 
 /////tabbed components
 
-console.log(tabsContent);
+// console.log(tabsContent);
 
 //this method is not optimal since an event is assigned to every(multiple) elements
 // tabs.forEach(function(tab){
@@ -160,7 +161,7 @@ const handleHover = function (event, opacity) {
 
     siblings.forEach(function (element) {
       if (element !== link) {
-        console.log(element);
+        // console.log(element);
         element.style.opacity = opacity;
       }
     });
@@ -180,26 +181,89 @@ nav.addEventListener('mouseout', function (event) {
   handleHover(event, 1);
 }); //mouse out is the opposite of mouse over
 
+//////sticky navigation
+// const initialCoords = section1.getBoundingClientRect(); //returns a DOMRect object providing
+// //... information about the size of an element and its position relative to the viewport.
+// console.log(initialCoords);
+
+// window.addEventListener('scroll', function (event) {
+//   console.log(window.scrollY);//returns pixels scrolled from top of window in the y axis
+//   //...non performing since window.scrollY is returned every time the screen is scrolled
+//   console.log(initialCoords.top);
+
+//   if (window.scrollY > initialCoords.top) {
+//     nav.classList.add('sticky');
+//   } else {
+//     nav.classList.remove('sticky');
+//   }
+// });
+
+//sticky navigation with intersection observer API
+// const observerCallBack = function (entries, observer) {
+//   entries.forEach(entry => {
+//     console.log(entry);
+//   });
+// }; //this callback function will get called each time that
+// //...the observed element (target element) is intersecting the root element at the defined threshold
+
+// const observerOptions = {
+//   root: null, //root is the element that the target is intersecting.
+//   //.. for 'null' the target element is observed intersecting the viewport
+//   threshold: [0, 0.2], //the percentage of intersection at which the observer callback will be called
+// };
+
+// const observer = new IntersectionObserver(observerCallBack, observerOptions);//notice the callback function in the observer brackets does
+//...not have brackets
+// observer.observe(section1);
+
+const header = document.querySelector('.header');
+
+const navHeight = nav.getBoundingClientRect().height; //returns a DOMRect object providing information about
+//... the size of an element and its position relative to the viewport.
+
+console.log(navHeight);
+
+const stickyNav = function (entries) {
+  const [entry] = entries; //destructuring ? the same way as writing entries[0]
+
+  console.log(entry);
+
+  if (!entry.isIntersecting) {
+    nav.classList.add('sticky');
+  } else {
+    nav.classList.remove('sticky');
+  }
+};
+
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  threshold: 0,
+  rootMargin: `-${navHeight}px`, //prevents overlapping the sticky navigation into the the
+  //...next section (features section). the  root margin is the height of the navigation
+});
+
+headerObserver.observe(header);
+
 ////////////////////////////////////
 ///////////////////////////////
 ////////////////////////
 //Lessons
 //selecting elements*********************
-console.log(document.documentElement);
-console.log(document.head);
-console.log(document.body);
+// console.log(document.documentElement);
+// console.log(document.head);
+// console.log(document.body);
 
-const header = document.querySelector('.header');
-const allSections = document.querySelectorAll('.section'); //returns nodelist.
-//nodelist does not get updated when one of its element is deleted in the html
+// const header = document.querySelector('.header');
+// const allSections = document.querySelectorAll('.section'); //returns nodelist.
+// //nodelist does not get updated when one of its element is deleted in the html
 
-console.log(allSections);
+// console.log(allSections);
 
-document.getElementById('section--1');
-const allButtons = document.getElementsByTagName('button');
-console.log(allButtons); //returns HTML Live collection. if the dom changes, the collection is also immediately updated
+// document.getElementById('section--1');
+// const allButtons = document.getElementsByTagName('button');
+// console.log(allButtons); //returns HTML Live collection. if the dom changes, the collection is also immediately updated
 
-console.log(document.getElementsByClassName('btn')); //returns HTML Live collection. if the dom changes, the collection is also immediately updated
+// console.log(document.getElementsByClassName('btn')); //returns HTML Live collection. if the dom changes, the collection is also immediately updated
 
 //creating and inserting elements********************
 
@@ -249,26 +313,26 @@ console.log(document.getElementsByClassName('btn')); //returns HTML Live collect
 
 //attributes
 
-const logo = document.querySelector('.nav__logo');
-console.log(logo.alt); //works for standard element attribute
-console.log(logo.src); //returns absolute source
-console.log(logo.className);
-logo.alt = 'Beautiful minimalist logo';
+// const logo = document.querySelector('.nav__logo');
+// console.log(logo.alt); //works for standard element attribute
+// console.log(logo.src); //returns absolute source
+// console.log(logo.className);
+// logo.alt = 'Beautiful minimalist logo';
 
 //non standard attribute
 
-console.log(logo.designer); //the attribute will not be accessed for a non-standard attribute
-console.log(logo.getAttribute('designer'));
-logo.setAttribute('company', 'Bankist');
+// console.log(logo.designer); //the attribute will not be accessed for a non-standard attribute
+// console.log(logo.getAttribute('designer'));
+// logo.setAttribute('company', 'Bankist');
 
-console.log(logo.getAttribute('src')); //returns relative source
+// console.log(logo.getAttribute('src')); //returns relative source
 
-const link = document.querySelector('.nav__link--btn');
-console.log(link.href);
-console.log(link.getAttribute('href'));
+// const link = document.querySelector('.nav__link--btn');
+// console.log(link.href);
+// console.log(link.getAttribute('href'));
 
-//data attributes
-console.log(logo.dataset.versionNumber);
+// //data attributes
+// console.log(logo.dataset.versionNumber);
 
 // //classes
 // logo.classList.add('c','v','s')//multiples classes can be added.
