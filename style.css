@@ -113,7 +113,7 @@ img {
 }
 
 .lazy-img {
-  filter: blur(20px);
+  filter: blur(20px); /*used for lazy loading*/
 }
 
 /* NAVIGATION */

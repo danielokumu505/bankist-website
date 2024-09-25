@@ -249,9 +249,9 @@ const allSections = document.querySelectorAll('.section');
 
 const revealSection = function (entries, observer) {
   // const [entry] = entries; //destructuring the same way as writing entries[0]
-  console.log(entries);
+  // console.log(entries);
   entries.forEach(entry => {
-    console.log(entry);
+    // console.log(entry);
     // console.log(observer);
 
     if (!entry.isIntersecting) return; // if true, the function is immediately finished. any code afterwords
@@ -273,6 +273,37 @@ allSections.forEach(function (section) {
 
   sectionObserver.observe(section);
 });
+
+////lazy loading images using  the intersection observer API
+const imageTargets = document.querySelectorAll('img[data-src]');
+
+const loadImage = function (entries, observer) {
+  // const [entry] = entries; //destructuring the same way as writing entries[0]
+
+  entries.forEach(entry => {
+    // console.log(entry);
+
+    if (!entry.isIntersecting) return;
+
+    //if intersecting, replace source image with data source image
+    entry.target.src = entry.target.dataset.src;
+
+    entry.target.addEventListener('load', function () {
+      entry.target.classList.remove('lazy-img'); //the blurry filter is removed once the new image is completely loaded
+      //...once the loading is finished, a load event is emmited
+    });
+
+    observer.unobserve(entry.target); //disables continous observation of target element once observed.
+  });
+};
+
+const imageObserver = new IntersectionObserver(loadImage, {
+  root: null, //set to entire viewport
+  threshold: 0,
+  rootMargin: '200px', //enables image to load earlier before being in the users view** important
+});
+
+imageTargets.forEach(image => imageObserver.observe(image));
 
 ////////////////////////////////////
 ///////////////////////////////
