@@ -221,12 +221,12 @@ const header = document.querySelector('.header');
 const navHeight = nav.getBoundingClientRect().height; //returns a DOMRect object providing information about
 //... the size of an element and its position relative to the viewport.
 
-console.log(navHeight);
+// console.log(navHeight);
 
 const stickyNav = function (entries) {
-  const [entry] = entries; //destructuring ? the same way as writing entries[0]
+  const [entry] = entries; //destructuring the same way as writing entries[0]
 
-  console.log(entry);
+  // console.log(entry);
 
   if (!entry.isIntersecting) {
     nav.classList.add('sticky');
@@ -243,6 +243,36 @@ const headerObserver = new IntersectionObserver(stickyNav, {
 });
 
 headerObserver.observe(header);
+
+/////Revealing sections on scroll
+const allSections = document.querySelectorAll('.section');
+
+const revealSection = function (entries, observer) {
+  // const [entry] = entries; //destructuring the same way as writing entries[0]
+  console.log(entries);
+  entries.forEach(entry => {
+    console.log(entry);
+    // console.log(observer);
+
+    if (!entry.isIntersecting) return; // if true, the function is immediately finished. any code afterwords
+    //...is not executed
+
+    entry.target.classList.remove('section--hidden');
+
+    observer.unobserve(entry.target); //disables continous observation of target element once observed.
+  });
+};
+
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root: null, // for root 'null' the target element is observed intersecting the viewport
+  threshold: 0.15, //the section is revealed with animation when it is 15% visible in the viewport
+});
+
+allSections.forEach(function (section) {
+  section.classList.add('section--hidden');
+
+  sectionObserver.observe(section);
+});
 
 ////////////////////////////////////
 ///////////////////////////////
