@@ -300,11 +300,135 @@ const loadImage = function (entries, observer) {
 const imageObserver = new IntersectionObserver(loadImage, {
   root: null, //set to entire viewport
   threshold: 0,
-  rootMargin: '200px', //enables image to load earlier before being in the users view** important
+  rootMargin: '200px', //enables image to load earlier before being in the users view **important
 });
 
 imageTargets.forEach(image => imageObserver.observe(image));
 
+//////Building the slider components
+//the slider function  reduces pollution of the global namespace
+const slider = function () {
+  const slides = document.querySelectorAll('.slide');
+
+  const btnLeft = document.querySelector('.slider__btn--left');
+
+  const btnRight = document.querySelector('.slider__btn--right');
+
+  const dotContainer = document.querySelector('.dots');
+
+  let currentSlide = 0;
+
+  const maxSlide = slides.length; //the nodelist has the length property just like arrays
+
+  //functions
+  const createDots = function () {
+    slides.forEach(function (s, index) {
+      dotContainer.insertAdjacentHTML(
+        'beforeend',
+        `<button class="dots__dot" data-slide="${index}"></button>`
+      );
+    });
+  };
+
+  //trial code
+  // const activateDot = function (currentSlide) {
+  //   const navButtons = document.querySelectorAll('.dots__dot');
+
+  //   navButtons.forEach(function (navButton) {
+  //     if (navButton.dataset.slide === String(currentSlide)) {
+  //       navButton.classList.add('dots__dot--active');
+  //     } else {
+  //       navButton.classList.remove('dots__dot--active');
+  //     }
+  //   });
+  // };
+
+  // activateDot(currentSlide);
+
+  const activateDot = function (slide) {
+    document
+      .querySelectorAll('.dots__dot')
+      .forEach(dot => dot.classList.remove('dots__dot--active'));
+
+    document
+      .querySelector(`.dots__dot[data-slide="${slide}"]`)
+      .classList.add('dots__dot--active');
+  };
+
+  const goToSlide = function (currentSlide) {
+    slides.forEach(
+      (slide, index) =>
+        (slide.style.transform = `translateX(${100 * (index - currentSlide)}%)`)
+    );
+  };
+
+  //moving to the next slide
+  const nextSlideFunction = function () {
+    if (currentSlide === maxSlide - 1) {
+      currentSlide = 0;
+    } else {
+      currentSlide++;
+    }
+
+    goToSlide(currentSlide);
+
+    activateDot(currentSlide);
+  };
+
+  const previousSlideFunction = function () {
+    if (currentSlide === 0) {
+      currentSlide = maxSlide - 1;
+    } else {
+      currentSlide--;
+    }
+
+    //the logic
+    // else if (currentSlide === 2) {
+    //   currentSlide = currentSlide - 1;
+    // } else if (currentSlide === 1) {
+    //   currentSlide = currentSlide - 1;
+    // }
+
+    goToSlide(currentSlide);
+
+    activateDot(currentSlide);
+  };
+
+  const init = function () {
+    goToSlide(currentSlide); //sets the initial positions for the slides
+
+    createDots();
+
+    activateDot(currentSlide);
+  };
+
+  init();
+
+  //event handlers
+  btnRight.addEventListener('click', nextSlideFunction);
+  btnLeft.addEventListener('click', previousSlideFunction);
+
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'ArrowLeft') previousSlideFunction();
+
+    event.key === 'ArrowRight' && nextSlideFunction(); //short circuiting
+    // The AND (&&) operator returns the first falsy value it encounters. If all values are truthy, it returns the last value
+  }); //key events are accessed at the document level
+
+  dotContainer.addEventListener('click', function (event) {
+    if (event.target.classList.contains('dots__dot')) {
+      const { slide } = event.target.dataset; //destructuring // const slide = event.target.dataset.slide;
+
+      console.log(typeof slide);
+
+      goToSlide(slide); //the gotoslide here has used a string as parameter but the parameter is turned
+      //... into a number in the background
+      activateDot(slide);
+    }
+  }); //event delegation with the parent element of dots
+};
+
+slider();
 ////////////////////////////////////
 ///////////////////////////////
 ////////////////////////
