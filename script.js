@@ -387,7 +387,7 @@ const slider = function () {
     // } else if (currentSlide === 1) {
     //   currentSlide = currentSlide - 1;
     // }
-    
+
     goToSlide(currentSlide);
 
     activateDot(currentSlide);
@@ -623,3 +623,20 @@ slider();
 //     element.style.transform = 'scale(0.5)';
 //   }
 // });
+
+//lifecycle DOM events****************************************
+// document.addEventListener('DOMContentLoaded', function (event) {
+//   console.log('html parsed and dom tree built', event);
+// }); //returns when javascript and html completely load into the webpage while not any other external resources
+
+// window.addEventListener('load', function (event) {
+//   console.log('page fully loaded', event);
+// });
+
+// window.addEventListener('beforeunload', function (event) {
+//   event.preventDefault();
+
+//   console.log(event);
+
+//   event.returnValue = '';
+// }); //triggered when user is about to leave web page
