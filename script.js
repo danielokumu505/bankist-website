@@ -306,7 +306,7 @@ const imageObserver = new IntersectionObserver(loadImage, {
 imageTargets.forEach(image => imageObserver.observe(image));
 
 //////Building the slider components
-//the slider function  reduces pollution of the global namespace
+//the slider function reduces pollution of the global namespace
 const slider = function () {
   const slides = document.querySelectorAll('.slide');
 
@@ -356,10 +356,9 @@ const slider = function () {
   };
 
   const goToSlide = function (currentSlide) {
-    slides.forEach(
-      (slide, index) =>
-        (slide.style.transform = `translateX(${100 * (index - currentSlide)}%)`)
-    );
+    slides.forEach((slide, index) => {
+      slide.style.transform = `translateX(${100 * (index - currentSlide)}%)`;
+    });
   };
 
   //moving to the next slide
@@ -388,7 +387,7 @@ const slider = function () {
     // } else if (currentSlide === 1) {
     //   currentSlide = currentSlide - 1;
     // }
-
+    
     goToSlide(currentSlide);
 
     activateDot(currentSlide);
@@ -419,11 +418,11 @@ const slider = function () {
     if (event.target.classList.contains('dots__dot')) {
       const { slide } = event.target.dataset; //destructuring // const slide = event.target.dataset.slide;
 
-      console.log(typeof slide);
+      currentSlide = Number(slide);
 
-      goToSlide(slide); //the gotoslide here has used a string as parameter but the parameter is turned
+      goToSlide(currentSlide); //the gotoslide here has used a string as parameter but the parameter is turned
       //... into a number in the background
-      activateDot(slide);
+      activateDot(currentSlide);
     }
   }); //event delegation with the parent element of dots
 };
